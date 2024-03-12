@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { getAnimes } from "./api";
+import Modal from "./modal"
 import "./App.css";
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
 
   useEffect(() => {
     getAnimes(animeName).then((results) => {
+      results.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0))
       setMovies(results);
     });
   }, []);
@@ -40,11 +42,11 @@ function SearchBar({ animeName, setAnimeName, handleSubmit }) {
   return (
     <>
       <form
-        className="flex flex-col items-center justify-center my-4"
+        className="pb-4 flex flex-col items-center justify-center my-4 w-full bg-sky-800 shadow-2xl"
         action=""
         onSubmit={handleSubmit}
       >
-        <label className="mt-4 font-bold text-2xl" htmlFor="search">
+        <label className="mt-4 font-bold text-2xl text-neutral-300" htmlFor="search">
           Search Your Favorite Anime
         </label>
         <div className="mt-4">
@@ -65,8 +67,16 @@ function SearchBar({ animeName, setAnimeName, handleSubmit }) {
 }
 
 function MoviesList({ moviesData }) {
+  const [modalOpen, setmodalOpen] = useState(false)
+  const [selectedAnime, setSelectedAnime] = useState([])
+
+  function handleSelectedAnime(movie) {
+    (!modalOpen) ? setmodalOpen(true) : setmodalOpen(false)
+    setSelectedAnime(movie)
+  }
+
   const listMovies = moviesData.map((movie, id) => (
-    <li className="m-2 bg-red-400 w-60 rounded-lg cursor-pointer transition ease-in-out duration-300 hover:text-neutral-200 hover:drop-shadow-lg" key={id}>
+    <li className="m-2 bg-sky-800 w-60 rounded-lg cursor-pointer transition ease-in-out duration-300 hover:text-neutral-200 hover:shadow-lg hover:shadow-black" key={id} onClick={() => handleSelectedAnime(movie)}>
       <h1 className="text-center font-bold p-2 truncate">{movie.title} </h1>
       <img
         className="p-2 h-96 w-full mx-auto"
@@ -79,7 +89,9 @@ function MoviesList({ moviesData }) {
 
   return (
     <ul>
-      <div className="flex flex-wrap justify-center p-4">{listMovies}</div>
+      <div className="flex flex-wrap justify-center p-4 relative">{listMovies}
+      <Modal selectedAnime={selectedAnime} modalOpen={modalOpen} handleSelectedAnime={handleSelectedAnime}/>
+      </div>
     </ul>
   );
 }
