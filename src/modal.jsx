@@ -1,14 +1,15 @@
 export default function Modal({
   selectedAnime,
   modalOpen,
-  handleSelectedAnime
+  handleSelectedAnime,
+  posTop
 }) {
   return (
     <>
     {modalOpen && (
       <div
-        className="min-w-96 bg-neutral-300/65 backdrop-blur rounded-lg m-4"
-        style={!modalOpen ? { display: "hidden" } : { position: "absolute" }}
+        className={`min-w-96 bg-neutral-300/65 backdrop-blur top-[1504px] rounded-lg m-4`}
+        style={!modalOpen ? { display: "hidden" } : { position: "absolute", top: posTop+"px" }}
       >
         <div className="flex justify-center items-center flex-col text-center p-4">
           <h1 className="text-center font-bold text-lg">{selectedAnime.title}</h1>
