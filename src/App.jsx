@@ -25,7 +25,7 @@ function App() {
 
   return (
     <>
-      <div className="container min-h-screen bg-sky-600 w-full mx-auto">
+      <div className="container min-h-screen bg-sky-600 w-full mx-auto overflow-auto">
         <SearchBar
           animeName={animeName}
           setAnimeName={setAnimeName}
